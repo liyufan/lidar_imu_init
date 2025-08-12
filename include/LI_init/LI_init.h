@@ -16,6 +16,14 @@
 #include <sys/time.h>
 #include "matplotlibcpp.h"
 
+#if CERES_VERSION_MAJOR > 2 || (CERES_VERSION_MAJOR == 2 && CERES_VERSION_MINOR >= 1)
+using ParameterizationType = ceres::EigenQuaternionManifold;
+using ParameterizationPtr = ceres::Manifold*;
+#else
+using ParameterizationType = ceres::EigenQuaternionParameterization;
+using ParameterizationPtr = ceres::LocalParameterization*;
+#endif
+
 #define FILE_DIR(name)     (string(string(ROOT_DIR) + "Log/"+ name))
 
 namespace plt = matplotlibcpp;

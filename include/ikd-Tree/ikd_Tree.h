@@ -2,11 +2,7 @@
 #include <pcl/point_types.h>
 #include <Eigen/StdVector>
 #include <Eigen/Geometry>
-#include <stdio.h>
-#include <queue>
 #include <pthread.h>
-#include <chrono>
-#include <time.h>
 
 
 #define EPSS 1e-6
@@ -56,8 +52,8 @@ struct PointType_CMP{
     };
     bool operator < (const PointType_CMP &a)const{
         if (fabs(dist - a.dist) < 1e-10) return point.x < a.point.x;
-          else return dist < a.dist;
-    }    
+        else return dist < a.dist;
+    }
 };
 
 struct BoxPointType{

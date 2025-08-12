@@ -1,19 +1,19 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.9)
 project(lidar_imu_init)
 
 SET(CMAKE_BUILD_TYPE "Release")
 
-ADD_COMPILE_OPTIONS(-std=c++14 )
-ADD_COMPILE_OPTIONS(-std=c++14 )
-set( CMAKE_CXX_FLAGS "-std=c++14 -O3" ) 
+add_compile_options(
+  -O3
+  -fexceptions
+)
 
 add_definitions(-DROOT_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}/\")
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fexceptions" )
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -pthread -std=c++0x -std=c++14 -fexceptions")
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 message("Current CPU architecture: ${CMAKE_SYSTEM_PROCESSOR}")
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)" )
@@ -36,8 +36,6 @@ else()
 endif()
 
 find_package(OpenMP QUIET)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}   ${OpenMP_C_FLAGS}")
 
 find_package(PythonLibs REQUIRED)
 find_path(MATPLOTLIB_CPP_INCLUDE_DIRS "matplotlibcpp.h")
@@ -51,11 +49,14 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   pcl_ros
   tf
-  livox_ros_driver
   message_generation
   eigen_conversions
 )
 
+find_package(catkin COMPONENTS
+  livox_ros_driver2
+  livox_ros_driver
+)
 find_package(Eigen3 REQUIRED)
 find_package(PCL 1.8 REQUIRED)
 find_package(Ceres REQUIRED)
@@ -69,16 +70,16 @@ add_message_files(
 )
 
 include_directories(
-     ../../devel/include
-	${catkin_INCLUDE_DIRS} 
+  ${catkin_INCLUDE_DIRS} 
   ${EIGEN3_INCLUDE_DIR}
   ${PCL_INCLUDE_DIRS}
   ${PYTHON_INCLUDE_DIRS}
-  include)
+  include
+)
 
 generate_messages(
- DEPENDENCIES
- geometry_msgs
+  DEPENDENCIES
+  geometry_msgs
 )
 
 catkin_package(
@@ -88,14 +89,30 @@ catkin_package(
 )
 
 add_executable(li_init
-        src/laserMapping.cpp
-        include/ikd-Tree/ikd_Tree.cpp
-        include/LI_init/LI_init.cpp
-        src/preprocess.cpp)
+  src/laserMapping.cpp
+  include/ikd-Tree/ikd_Tree.cpp
+  include/LI_init/LI_init.cpp
+  src/preprocess.cpp
+)
 
-target_link_libraries(li_init ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${PYTHON_LIBRARIES} ${CERES_LIBRARIES})
+if(livox_ros_driver2_FOUND)
+  message(STATUS "Found livox_ros_driver2: ${livox_ros_driver2_DIR}")
+  target_compile_definitions(li_init PRIVATE -DLIVOX_ROS_DRIVER2)
+elseif(livox_ros_driver_FOUND)
+  message(STATUS "Found livox_ros_driver: ${livox_ros_driver_DIR}")
+  target_compile_definitions(li_init PRIVATE -DLIVOX_ROS_DRIVER)
+else()
+  message(FATAL_ERROR "livox_ros_driver or livox_ros_driver2 not found")
+endif()
+
+if(OpenMP_CXX_FOUND)
+  target_link_libraries(li_init OpenMP::OpenMP_CXX)
+endif()
+
+target_link_libraries(li_init
+  ${catkin_LIBRARIES}
+  ${PCL_LIBRARIES}
+  ${PYTHON_LIBRARIES}
+  ${CERES_LIBRARIES}
+)
 target_include_directories(li_init PRIVATE ${PYTHON_INCLUDE_DIRS})
-
-
-
-
