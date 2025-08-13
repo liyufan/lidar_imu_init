@@ -85,4 +85,4 @@ After initialization and refinement finished, the result would be written into `
 
 ---
 
-These docker tutorial is tested on ubuntu 18.04 and may not be applied to arm platforms such as NVIDIA Jetson. In addition, this docker tutorial was used to execute the LI-Init with a bagfile, and if the actual sensor is used, it needs to be modified to create a docker container.  
+These docker tutorial is tested on ubuntu 18.04 and may not be applied to arm platforms such as NVIDIA Jetson. In addition, this docker tutorial was used to execute the LI-Init with a bagfile, and if the actual sensor is used, it needs to be modified to create a docker container.

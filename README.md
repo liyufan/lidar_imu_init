@@ -4,7 +4,7 @@
 
 1. A robust LiDAR odometry (**FAST-LO**) modified from FAST-LIO2.
 2. Fast and robust **temporal offset and extrinsic parameter calibration** between LiDAR and IMU without any hardware setup.
-3. Support **multiple LiDAR types**: both mechanical spinning LiDAR (Hesai, Velodyne, Ouster) and solid-state LiDAR ( Livox Avia/Mid360)
+3. Support **multiple LiDAR types**: both mechanical spinning LiDAR (Hesai, Velodyne, Ouster) and solid-state LiDAR (Livox Avia/Mid360)
 4. Seamlessly merged into FAST-LIO2, as a robust initialization module.
 
 **Contributors**: [Fangcheng Zhu 朱方程](https://github.com/zfc-zfc)， [Yunfan Ren 任云帆](https://github.com/RENyunfan)， [Wei Xu 徐威](https://github.com/XW-HKU)， [Yixi Cai 蔡逸熙](https://github.com/Ecstasy-EC)
@@ -35,7 +35,7 @@ If our code is used in your project, please cite our paper following the bibtex 
 
 ### Related Video:
 
-our accompanying videos are now available on **YouTube** (click below images to open) and [Bilibili](https://www.bilibili.com/video/BV1ZS4y127mW?spm_id_from=333.337.search-card.all.click).
+our accompanying videos are now available on **YouTube** (click below images to open) and [Bilibili](https://www.bilibili.com/video/BV1ZS4y127mW).
 
 <div align="center">
     <a href="https://www.youtube.com/watch?v=WiHgcPpKwvU" target="_blank">
@@ -60,16 +60,16 @@ Eigen  >= 3.3.4, Follow [Eigen Installation](http://eigen.tuxfamily.org/index.ph
 
 ### 1.3. **livox_ros_driver**
 
-Follow [livox_ros_driver Installation](https://github.com/Livox-SDK/livox_ros_driver).
+Follow [livox_ros_driver Installation](https://github.com/Livox-SDK/livox_ros_driver) or [livox_ros_driver2 Installation](https://github.com/Livox-SDK/livox_ros_driver2).
 
 *Remarks:*
 
 - Since the **LI_Init** must support Livox serials LiDAR firstly, so the **livox_ros_driver** must be installed and **sourced** before run any LI_Init luanch file.
-- How to source? The easiest way is add the line `source $Livox_ros_driver_dir$/devel/setup.bash` to the end of file `~/.bashrc`, where `$Livox_ros_driver_dir$` is the directory of the livox_ros_driver workspace (should be the `ws_livox` directory if you completely followed the livox official document).
+- How to source? The easiest way is add the line `source $Livox_ros_driver_dir/devel/setup.bash` to the end of file `~/.bashrc`, where `$Livox_ros_driver_dir` is the directory of the livox_ros_driver workspace (should be the `ws_livox` directory if you completely followed the livox official document).
 
 ###  **1.4. ceres-solver**
 
-Our code has been tested on [ceres-solver-2.0.0](http://ceres-solver.org/installation.html#linux). Please download ceres-solver  following the instructions.
+Our code has been tested on [ceres-solver-2.2.0](http://ceres-solver.org/installation.html#linux). Please download ceres-solver following the instructions.
 
 ### **1.5. Getting start with Docker**  
 
@@ -78,13 +78,14 @@ For more information, you can check [docker_start.md](./docker/docker_start.md).
 
 ## 2. Build
 
-Clone the repository and catkin_make:
+Clone the repository and build:
 
 ```
+sudo apt install python3-catkin-tools
 cd ~/catkin_ws/src
 git clone https://github.com/hku-mars/LiDAR_IMU_Init.git
 cd ..
-catkin_make -j
+catkin build
 source devel/setup.bash
 ```
 
