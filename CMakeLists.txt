@@ -45,14 +45,6 @@ add_message_files(
   States.msg
 )
 
-include_directories(
-  ${catkin_INCLUDE_DIRS} 
-  ${EIGEN3_INCLUDE_DIR}
-  ${PCL_INCLUDE_DIRS}
-  ${PYTHON_INCLUDE_DIRS}
-  include
-)
-
 generate_messages(
   DEPENDENCIES
   geometry_msgs
@@ -70,6 +62,8 @@ add_executable(li_init
   include/LI_init/LI_init.cpp
   src/preprocess.cpp
 )
+
+add_dependencies(li_init ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 target_compile_options(li_init PRIVATE
   $<$<CONFIG:Debug>:-O0 -g>
@@ -118,4 +112,10 @@ target_link_libraries(li_init
   ${CERES_LIBRARIES}
   ${CMAKE_THREAD_LIBS_INIT}
 )
-target_include_directories(li_init PRIVATE ${PYTHON_INCLUDE_DIRS})
+target_include_directories(li_init PRIVATE
+  ${catkin_INCLUDE_DIRS}
+  ${EIGEN3_INCLUDE_DIR}
+  ${PCL_INCLUDE_DIRS}
+  ${PYTHON_INCLUDE_DIRS}
+  include
+)
